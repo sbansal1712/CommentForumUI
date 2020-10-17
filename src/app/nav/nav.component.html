@@ -1,0 +1,25 @@
+<header>
+  <div class="container">
+    <a routerLink="/" class="logo"> {{ appTitle }} </a>
+    <nav>
+      <ul>
+        <li><a routerLink="/home">Home</a></li>
+       
+        <li *ngIf="currentUser == undefined" ><a  routerLink="/register">SignIn/SignUp</a></li>
+        
+        <li *ngIf="currentUser != undefined"> <img   [matTooltip]="currentUser"  mat-icon-button [matMenuTriggerFor]="usermenu" src="assets/profile.png" class="user-profile"> </li>
+      </ul>
+    </nav>
+  </div>
+  <mat-menu style="width: 100px !important;" #usermenu="matMenu">
+    <button style="outline: none;" mat-menu-item>
+      <mat-icon>account_circle</mat-icon>
+      <span>{{currentUser}}</span>
+    </button>
+
+    <button (click)="logout()" style="outline: none;" mat-menu-item>
+      <mat-icon style="color: #ff0000;">exit_to_app</mat-icon>
+      <span>Log out</span>
+    </button>
+  </mat-menu>
+</header>

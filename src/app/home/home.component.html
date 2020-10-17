@@ -1,0 +1,18 @@
+<button mat-button (click)="openDialog()">Start New Conversation</button>
+
+<div *ngFor="let Conversation of conversations">
+  <mat-card (click)="goToConversation(Conversation)" class="ad-card">
+    <mat-card-header>
+     
+    </mat-card-header>
+    
+    <mat-card-content>
+      <p>
+        {{ Conversation.ConversationTitle }}
+      </p>
+      <p>
+        By {{Conversation.username}}
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

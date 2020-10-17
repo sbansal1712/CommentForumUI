@@ -1,0 +1,70 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+
+body, html {
+    height: 100%;
+    margin: 0 auto;
+}
+
+body {
+    font-family: 'Montserrat';
+    font-size: 18px;
+}
+
+a {
+    text-decoration: none;
+}
+.plant-select {
+    margin-right: 1.7%;
+    width: 24.5%;
+    .mat-form-field-appearance-outline .mat-form-field-wrapper {
+      margin: 0px !important;
+    }
+    .mat-form-field-wrapper {
+      margin-top: 0px !important;
+      margin-bottom: 0px !important;
+    }
+    .mat-form-field-infix {
+      padding: 5px 0px 5px 0px;
+    }
+    .mat-select-arrow-wrapper {
+      padding-top: 5px;
+    }
+    vertical-align: sub;
+  }
+.mat-card:hover {
+    box-shadow: 0 4px 4px 4px #0000001f, 0 4px 4px 0 rgba(0, 0, 0, 0.14),
+      0 4px 4px 0 #0000001f !important;
+    transform: translate3d(0, 0, 0);
+    transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+      box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 1.3em;
+    display: grid;
+    grid-template-columns: 30% auto;
+
+    a {
+        color: white;
+    }
+}
+.red-snackbar {
+    background: #ffffff;
+    color: #ff695e;
+  }
+.blue-snackbar {
+    background: #ffffff;
+    color: #0eb476;
+  }
+
+section {
+    width: 80%;
+    margin: 0 auto;
+    padding: 2em;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

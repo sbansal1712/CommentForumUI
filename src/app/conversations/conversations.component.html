@@ -1,0 +1,39 @@
+
+
+<span>{{conversationTitle}}</span>
+
+<span> by {{conversation ? conversation[0].username : ''}}</span>
+
+<form [formGroup]="CommentForm">
+    <textarea style="margin-top: 2%; width: 100%;" formControlName="CommentText">
+    
+    </textarea>
+    <button type="submit" (click)="addComment()">Add Comment</button>
+    </form> 
+
+
+ <div class="col-md-9" style="margin-top:2%; " *ngFor="let response of response; let i = index">
+    <mat-label>{{response.username}}</mat-label>
+    <textarea  [disabled]="username != response.username" style="width:100%">
+     {{response.comment}}
+  
+    </textarea>
+    <div class="col-md-8" style="margin-top:2%; margin-left: 2% ; " *ngFor="let replies of response.Replies; let i = index">
+        <mat-label>{{replies.username}}</mat-label>
+        <textarea  [disabled]="username != replies.username" style="width:90%">
+         {{replies.comment}}
+      
+        </textarea>
+    </div>
+    <button type="submit" (click)="activeReply(i)">Reply</button>
+    <form [formGroup]="ReplyForm">
+        <textarea *ngIf="response.activeReply" formControlName="ReplyText"></textarea>
+        <button *ngIf="response.activeReply" type="submit" (click)="reply(i)">Submit</button>
+    </form>
+    
+ </div>
+
+
+ 
+
+
