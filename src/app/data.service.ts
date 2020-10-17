@@ -15,7 +15,7 @@ export class DataService {
   public getLoggedInName = new Subject();
   public conversationSubject = new Subject();
   mealIndex: any;
-  //apiUrl = "https://ad-management.herokuapp.com/";
+ 
   constructor(private http: HttpClient, private snackbar : MatSnackBar) {}
 
 

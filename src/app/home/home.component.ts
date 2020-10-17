@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
       if(result != undefined){
        
       this.dataService.createNewConversation({
-        username : sessionStorage.getItem("username"), ConversationTitle : result.Comment
+        username : sessionStorage.getItem("username"), ConversationTitle : result.Comment, createdOn : Date.now()
       }).subscribe((data : any) => {
         this.getAllConversations()
       })

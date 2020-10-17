@@ -1,39 +1,75 @@
-
-
 <span>{{conversationTitle}}</span>
 
 <span> by {{conversation ? conversation[0].username : ''}}</span>
 
 <form [formGroup]="CommentForm">
-    <textarea style="margin-top: 2%; width: 100%;" formControlName="CommentText">
-    
+
+    <textarea
+        style=" box-sizing: border-box; border-style:solid;border: solid 2px; border-color : #d45673; margin-top: 2%; width: 100%;"
+        formControlName="CommentText">
+
     </textarea>
-    <button type="submit" (click)="addComment()">Add Comment</button>
-    </form> 
 
+    <button mat-stroked-button type="submit" (click)="addComment()">Add Comment</button>
+</form>
 
- <div class="col-md-9" style="margin-top:2%; " *ngFor="let response of response; let i = index">
-    <mat-label>{{response.username}}</mat-label>
-    <textarea  [disabled]="username != response.username" style="width:100%">
-     {{response.comment}}
+<form [formGroup]="ReplyForm">
+    <div class="col-md-9" style="margin-top:5%; " *ngFor="let response of response; let i = index">
+
+        <mat-label style="color: #333333;">{{response.username}}</mat-label>
+        <mat-label style="color: #cccccc; margin-left: 2%;">{{response.createdOn | date: "dd-mm-yy, HH:mm:ss"}}
+        </mat-label>
+       
+        <!-- <textarea  [disabled]="username != response.username" style="width:100%">
+     {{response.comment}} 
   
+    </textarea> -->
+        <textarea formControlName="ReplyText" [value]="response.comment" *ngIf="response.editReply" style="width:90%">
+
+
     </textarea>
-    <div class="col-md-8" style="margin-top:2%; margin-left: 2% ; " *ngFor="let replies of response.Replies; let i = index">
-        <mat-label>{{replies.username}}</mat-label>
-        <textarea  [disabled]="username != replies.username" style="width:90%">
+        <textarea disabled *ngIf="!response.editReply" style="width:100%">
+        {{response.comment}}
+           
+    </textarea>
+   
+        <div class="col-md-8" style="margin-top:2%; margin-left: 2% ; "
+            *ngFor="let replies of response.Replies; let j = index">
+            <mat-label>{{replies.username}}</mat-label>
+            <mat-label style="color: #cccccc; margin-left: 2%;">{{replies.createdOn | date: "dd-mm-yy, HH:mm:ss"}}
+            </mat-label>
+            <button mat-stroked-button style="margin-left:2%;" *ngIf="username == replies.username && !replies.editReply" type="submit"
+            (click)="activateEditReply(i,j)">Edit</button>
+        <button mat-stroked-button style="margin-left:2%;" *ngIf="username == replies.username && replies.editReply" type="submit"
+            (click)="editReply(i,j)">Submit</button>
+            <textarea formControlName="ReplyText" [value]="replies.comment" *ngIf="replies.editReply" style="width:100%">
+
+
+           </textarea>
+            <textarea disabled *ngIf="!replies.editReply" style="width:100%">
          {{replies.comment}}
-      
+            
         </textarea>
+           
+
+        </div>
+
+        
+        <button mat-stroked-button *ngIf="username == response.username && !response.editReply" type="submit"
+            (click)="activateEditResponse(i)">Edit</button>
+            <button *ngIf="username == response.username && response.editReply" type="submit"
+            (click)="editResponse(i)">Submit</button>
+        
+
+        <div class="col-md-8" style="margin-top:2%; margin-left: 2% ; ">
+
+        <textarea style="width:100%" *ngIf="response.activeReply" formControlName="ReplyText"></textarea>
+        <button mat-stroked-button  *ngIf="!response.activeReply" type="submit" (click)="activeReply(i)">Reply</button>
+        <button mat-stroked-button  *ngIf="response.activeReply" type="submit" (click)="reply(i)">Submit</button>
+       
     </div>
-    <button type="submit" (click)="activeReply(i)">Reply</button>
-    <form [formGroup]="ReplyForm">
-        <textarea *ngIf="response.activeReply" formControlName="ReplyText"></textarea>
-        <button *ngIf="response.activeReply" type="submit" (click)="reply(i)">Submit</button>
-    </form>
-    
- </div>
+        
 
 
- 
-
-
+    </div>
+</form>
