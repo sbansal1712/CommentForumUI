@@ -1,4 +1,4 @@
-<button mat-button (click)="openDialog()">Start New Conversation</button>
+<button mat-stroked-button (click)="openDialog()">Start New Conversation</button>
 
 <div *ngFor="let Conversation of conversations">
   <mat-card (click)="goToConversation(Conversation)" class="ad-card">

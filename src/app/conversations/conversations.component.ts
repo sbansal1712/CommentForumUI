@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { interval, Subscription } from 'rxjs';
 import { DataService } from '../data.service';
 
 @Component({
@@ -17,9 +18,29 @@ export class ConversationsComponent implements OnInit {
   ReplyForm:FormGroup;
   response: any = [];
   username: string;
+  LoggedInUser: any;
+  checkAuth: boolean = false;
+  subscription: Subscription;
+  source = interval(2000);
 
-  constructor(private dataService : DataService, private activatedRoute: ActivatedRoute) { 
+  constructor(private dataService : DataService, private activatedRoute: ActivatedRoute, private router : Router) { 
    
+    this.subscription = this.source.subscribe((val) =>
+    this.refreshComments()
+  );
+  this.LoggedInUser = sessionStorage.getItem("username");
+  if(this.LoggedInUser != undefined && this.LoggedInUser != null && this.LoggedInUser != ""){
+    this.checkAuth = true
+    console.log(this.checkAuth)
+  }
+      
+    // this.dataService.getLoggedInName.subscribe((data) => {
+    //   console.log(data)
+    //   this.LoggedInUser = data
+    //   sessionStorage.setItem("username",this.LoggedInUser)
+     
+    //   console.log(this.LoggedInUser)
+    // })
     this.conversationID = this.activatedRoute.snapshot.paramMap.get("id");
     this.CommentForm = new FormGroup({
       CommentText: new FormControl(),
@@ -34,59 +55,97 @@ export class ConversationsComponent implements OnInit {
     //   console.log(this.conversationTitle)
     // })
   }
+  refreshComments(): void {
+    setTimeout(() => {
+      this.getConversationByID()
+      }
+    , 2500);
+  }
 
   ngOnInit() {
-    this.username = sessionStorage.getItem("username")
+    
     this.getConversationByID()
     //this.subjectUpdates()
   }
   activeReply(i){
+    if(this.checkAuth){
     this.conversation[0].Responses[i].activeReply = true
+    }
+    else{
+      this.goToRegister();
+    }
   }
   activateEditReply(i, j){
-    
+    if(this.checkAuth){
     this.conversation[0].Responses[i].Replies[j].editReply = true
+    }
+    else{
+      this.goToRegister();
+    }
     
   }
+  goToRegister(){
+    this.dataService.openErrorSnackBar('Please Login to Continue', '')
+    this.router.navigate(['register'])
+  }
   editReply(i, j){
-   
-      this.conversation[0].Responses[i].Replies[j] = {username : this.username, comment : this.ReplyForm.get("ReplyText").value, createdOn : Date.now() }
+    if(this.checkAuth){
+      this.conversation[0].Responses[i].Replies[j] = {username : this.LoggedInUser, comment : this.ReplyForm.get("ReplyText").value, createdOn : Date.now() }
       console.log(this.conversation[0].Responses[i].Replies[j])
       this.dataService.addComment({Responses : this.conversation[0].Responses}, this.conversationID).subscribe((data:any) => {
         console.log(data)
         this.getConversationByID()
       })
+    }
+    else{
+      this.goToRegister();
+    }
   }
 
   activateEditResponse(i){
-    
+    if(this.checkAuth){
     this.conversation[0].Responses[i].editReply = true
-    
+    }
+    else{
+      this.goToRegister();
+    }
   }
   editResponse(i){
-   
-      this.conversation[0].Responses[i]= {username : this.username, comment : this.ReplyForm.get("ReplyText").value, createdOn : Date.now() }
+    if(this.checkAuth){
+      this.conversation[0].Responses[i]= {username : this.LoggedInUser, comment : this.ReplyForm.get("ReplyText").value, createdOn : Date.now() }
       console.log(this.conversation[0].Responses[i])
       this.dataService.addComment({Responses : this.conversation[0].Responses}, this.conversationID).subscribe((data:any) => {
         console.log(data)
         this.getConversationByID()
       })
   }
-
+  else{
+    this.goToRegister();
+  }
+  
+  }
 
   reply(i){
-    if(this.conversation[0].Responses[i].Replies == undefined){
-      this.conversation[0].Responses[i].Replies = []
+
+    if(this.checkAuth){
+      if(this.conversation[0].Responses[i].Replies == undefined){
+        this.conversation[0].Responses[i].Replies = []
+      }
+        this.conversation[0].Responses[i].Replies.push({username : this.LoggedInUser, comment : this.ReplyForm.get("ReplyText").value, createdOn : Date.now() })
+        this.dataService.addComment({Responses : this.conversation[0].Responses}, this.conversationID).subscribe((data:any) => {
+          
+          //this.ReplyForm.get("ReplyText").reset()
+          this.getConversationByID()
+        })
     }
-      this.conversation[0].Responses[i].Replies.push({username : this.username, comment : this.ReplyForm.get("ReplyText").value, createdOn : Date.now() })
-      this.dataService.addComment({Responses : this.conversation[0].Responses}, this.conversationID).subscribe((data:any) => {
-        
-        //this.ReplyForm.get("ReplyText").reset()
-        this.getConversationByID()
-      })
+    else{
+      this.goToRegister();
+    }
+    
   }
   addComment(){
 
+    if(this.checkAuth){
     if(this.conversation[0].Responses == undefined){
       this.conversation[0].Responses = []
     }
@@ -100,6 +159,11 @@ export class ConversationsComponent implements OnInit {
       this.getConversationByID()
     })
   }
+  else{
+    this.dataService.openErrorSnackBar('Please Login to Continue', '')
+    this.router.navigate(['register'])
+  }
+}
 
   
   getConversationByID(){
@@ -107,12 +171,10 @@ export class ConversationsComponent implements OnInit {
       
       this.conversation = data;
       this.response = this.conversation[0].Responses
-      console.log(this.response)
+      
       this.conversationTitle = this.conversation[0].ConversationTitle
     })
   }
-  subjectUpdates(){
-    
-  }
+ 
 
 }

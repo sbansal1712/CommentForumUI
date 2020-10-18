@@ -17,7 +17,7 @@
     <div class="col-md-9" style="margin-top:5%; " *ngFor="let response of response; let i = index">
 
         <mat-label style="color: #333333;">{{response.username}}</mat-label>
-        <mat-label style="color: #cccccc; margin-left: 2%;">{{response.createdOn | date: "dd-mm-yy, HH:mm:ss"}}
+        <mat-label style="color: #cccccc; margin-left: 2%;">{{response.createdOn | date: "dd-MM-yy, HH:mm:ss"}}
         </mat-label>
        
         <!-- <textarea  [disabled]="username != response.username" style="width:100%">
@@ -55,9 +55,9 @@
         </div>
 
         
-        <button mat-stroked-button *ngIf="username == response.username && !response.editReply" type="submit"
+        <button mat-stroked-button *ngIf="LoggedInUser == response.username && !response.editReply" type="submit"
             (click)="activateEditResponse(i)">Edit</button>
-            <button *ngIf="username == response.username && response.editReply" type="submit"
+            <button *ngIf="LoggedInUser == response.username && response.editReply" type="submit"
             (click)="editResponse(i)">Submit</button>
         
 

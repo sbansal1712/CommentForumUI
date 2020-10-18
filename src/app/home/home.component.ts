@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
   username: any;
   LoggedInUser: any;
   conversations: any;
+  checkAuth: boolean;
 
   
   
@@ -27,6 +28,9 @@ export class HomeComponent implements OnInit {
     this.dataService.getLoggedInName.subscribe((data) => {
       this.LoggedInUser = data
       sessionStorage.setItem("username",this.LoggedInUser)
+      if(this.LoggedInUser != undefined && this.LoggedInUser != null && this.LoggedInUser != ""){
+        this.checkAuth = true
+      }
       console.log(this.LoggedInUser)
     })
 
@@ -44,21 +48,31 @@ export class HomeComponent implements OnInit {
       this.conversations = data;
     })
   }
+  goToRegister(){
+    this.dataService.openErrorSnackBar('Please Login to Continue', '')
+    this.router.navigate(['register'])
+  }
   openDialog() {
-    const dialogRef = this.dialog.open(ConversationComponent, {
-      width: "800px",
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if(result != undefined){
-       
-      this.dataService.createNewConversation({
-        username : sessionStorage.getItem("username"), ConversationTitle : result.Comment, createdOn : Date.now()
-      }).subscribe((data : any) => {
-        this.getAllConversations()
-      })
-      console.log(`Dialog result: ${result.Comment}`);
-      }
-    });
+    if(this.checkAuth){
+      const dialogRef = this.dialog.open(ConversationComponent, {
+        width: "800px",
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if(result != undefined){
+         
+        this.dataService.createNewConversation({
+          username : sessionStorage.getItem("username"), ConversationTitle : result.Comment, createdOn : Date.now()
+        }).subscribe((data : any) => {
+          this.getAllConversations()
+        })
+        console.log(`Dialog result: ${result.Comment}`);
+        }
+      });
+    }
+    else{
+      this.goToRegister();
+    }
+    
   }
 }
