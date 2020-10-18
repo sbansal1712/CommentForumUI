@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { DataService } from "../data.service";
 import { MatDialog } from "@angular/material/dialog";
 import { ConversationComponent } from '../conversation/conversation.component';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: "app-home",
@@ -16,11 +17,15 @@ export class HomeComponent implements OnInit {
   LoggedInUser: any;
   conversations: any;
   checkAuth: boolean;
+  subscription: Subscription;
+  source = interval(2000);
 
   
   
   constructor(private dataService: DataService, private router : Router, private _snackbar: MatSnackBar,   private dialog: MatDialog,) {
    this.getAllConversations() 
+   this.subscription = this.source.subscribe((val) =>
+   this.refreshComments())
   }
 
   ngOnInit() {
@@ -37,6 +42,13 @@ export class HomeComponent implements OnInit {
     
     
   } 
+
+  refreshComments(): void {
+    setTimeout(() => {
+      this.getAllConversations()
+      }
+    , 2500);
+  }
 
   goToConversation(conversation){
     console.log(conversation)
