@@ -21,7 +21,7 @@ export class ConversationsComponent implements OnInit {
   LoggedInUser: any;
   checkAuth: boolean = false;
   subscription: Subscription;
-  source = interval(15000);
+  source = interval(25000);
   createdOn: any;
 
   constructor(private dataService : DataService, private activatedRoute: ActivatedRoute, private router : Router) { 
@@ -156,7 +156,7 @@ export class ConversationsComponent implements OnInit {
         "createdOn" : Date.now()
     })
     this.dataService.addComment({Responses : this.conversation[0].Responses}, this.conversationID).subscribe((data:any) => {
-      console.log(data)
+      this.CommentForm.get("CommentText").reset();
       this.getConversationByID()
     })
   }
