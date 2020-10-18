@@ -4,8 +4,8 @@ import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { DataService } from "../data.service";
 import { MatDialog } from "@angular/material/dialog";
-import { ConversationComponent } from '../conversation/conversation.component';
 import { interval, Subscription } from 'rxjs';
+import { NewConversationDialogComponent } from '../new-conversation-dialog/new-conversation-dialog.component';
 
 @Component({
   selector: "app-home",
@@ -29,15 +29,18 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.LoggedInUser = sessionStorage.getItem('username')
+    if(this.LoggedInUser != undefined && this.LoggedInUser != null && this.LoggedInUser != ""){
+      this.checkAuth = true
+    }
    
-    this.dataService.getLoggedInName.subscribe((data) => {
-      this.LoggedInUser = data
-      sessionStorage.setItem("username",this.LoggedInUser)
-      if(this.LoggedInUser != undefined && this.LoggedInUser != null && this.LoggedInUser != ""){
-        this.checkAuth = true
-      }
-      console.log(this.LoggedInUser)
-    })
+    // this.dataService.getLoggedInName.subscribe((data) => {
+    //   this.LoggedInUser = data
+      
+      
+    //   console.log(this.LoggedInUser)
+    // })
 
     
     
@@ -66,7 +69,7 @@ export class HomeComponent implements OnInit {
   }
   openDialog() {
     if(this.checkAuth){
-      const dialogRef = this.dialog.open(ConversationComponent, {
+      const dialogRef = this.dialog.open(NewConversationDialogComponent, {
         width: "800px",
       });
   

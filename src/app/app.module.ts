@@ -22,8 +22,10 @@ import { RegisterComponent } from "./register/register.component";
 import { AppMaterialModule } from './material-module';
 
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material/daterangepicker.module';
-import { ConversationComponent } from './conversation/conversation.component';
+
 import { ConversationsComponent } from './conversations/conversations.component';
+
+import { NewConversationDialogComponent } from './new-conversation-dialog/new-conversation-dialog.component';
 
 export const MY_NATIVE_FORMATS = {
   fullPickerInput: {
@@ -50,15 +52,17 @@ export const MY_NATIVE_FORMATS = {
 
     RegisterComponent,
 
-    ConversationComponent,
-
     ConversationsComponent,
+
+
+
+    NewConversationDialogComponent,
 
  
 
   
   ],
-  entryComponents:[ConversationComponent],
+  entryComponents:[NewConversationDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

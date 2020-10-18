@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
@@ -21,7 +21,8 @@ export class ConversationsComponent implements OnInit {
   LoggedInUser: any;
   checkAuth: boolean = false;
   subscription: Subscription;
-  source = interval(2000);
+  source = interval(15000);
+  createdOn: any;
 
   constructor(private dataService : DataService, private activatedRoute: ActivatedRoute, private router : Router) { 
    
@@ -171,7 +172,7 @@ export class ConversationsComponent implements OnInit {
       
       this.conversation = data;
       this.response = this.conversation[0].Responses
-      
+      this.createdOn = this.conversation[0].createdOn;
       this.conversationTitle = this.conversation[0].ConversationTitle
     })
   }

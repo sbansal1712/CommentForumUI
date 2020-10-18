@@ -13,6 +13,9 @@
       <p>
         By {{Conversation.username}}
       </p>
+      <span *ngIf="Conversation.createdOn">
+        <span style="color: #cccccc; float: right;">{{Conversation.createdOn | date: "dd-MMM-yy, HH:mm:ss"}}</span>
+        </span>
     </mat-card-content>
   </mat-card>
 </div>

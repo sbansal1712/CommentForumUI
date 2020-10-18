@@ -1,11 +1,15 @@
+<div class="conversation">
 <span>{{conversationTitle}}</span>
 
 <span> by {{conversation ? conversation[0].username : ''}}</span>
-
+<span *ngIf="createdOn">
+<span style="color: #cccccc; margin-left: 2%;">{{createdOn | date: "dd-MM-yy, HH:mm:ss"}}</span>
+</span>
 <form [formGroup]="CommentForm">
 
     <textarea
-        style=" box-sizing: border-box; border-style:solid;border: solid 2px; border-color : #d45673; margin-top: 2%; width: 100%;"
+        class="new-comment"
+        
         formControlName="CommentText">
 
     </textarea>
@@ -19,12 +23,16 @@
         <mat-label style="color: #333333;">{{response.username}}</mat-label>
         <mat-label style="color: #cccccc; margin-left: 2%;">{{response.createdOn | date: "dd-MM-yy, HH:mm:ss"}}
         </mat-label>
-       
+         
+        <button mat-stroked-button *ngIf="LoggedInUser == response.username && !response.editReply" type="submit"
+            (click)="activateEditResponse(i)">Edit</button>
+            <button *ngIf="LoggedInUser == response.username && response.editReply" type="submit"
+            (click)="editResponse(i)">Submit</button>
         <!-- <textarea  [disabled]="username != response.username" style="width:100%">
      {{response.comment}} 
   
     </textarea> -->
-        <textarea formControlName="ReplyText" [value]="response.comment" *ngIf="response.editReply" style="width:90%">
+        <textarea class="existing-comment" formControlName="ReplyText" [value]="response.comment" *ngIf="response.editReply">
 
 
     </textarea>
@@ -33,16 +41,16 @@
            
     </textarea>
    
-        <div class="col-md-8" style="margin-top:2%; margin-left: 2% ; "
+        <div class="col-md-8" style="margin-top:1%; margin-left: 2% ; "
             *ngFor="let replies of response.Replies; let j = index">
             <mat-label>{{replies.username}}</mat-label>
-            <mat-label style="color: #cccccc; margin-left: 2%;">{{replies.createdOn | date: "dd-mm-yy, HH:mm:ss"}}
+            <mat-label style="color: #cccccc; margin-left: 2%;">{{replies.createdOn | date: "dd-MM-yy, HH:mm:ss"}}
             </mat-label>
-            <button mat-stroked-button style="margin-left:2%;" *ngIf="username == replies.username && !replies.editReply" type="submit"
+            <button mat-stroked-button style="margin-left:2%;" *ngIf="LoggedInUser == replies.username && !replies.editReply" type="submit"
             (click)="activateEditReply(i,j)">Edit</button>
-        <button mat-stroked-button style="margin-left:2%;" *ngIf="username == replies.username && replies.editReply" type="submit"
+        <button mat-stroked-button style="margin-left:2%;" *ngIf="LoggedInUser == replies.username && replies.editReply" type="submit"
             (click)="editReply(i,j)">Submit</button>
-            <textarea formControlName="ReplyText" [value]="replies.comment" *ngIf="replies.editReply" style="width:100%">
+            <textarea class="existing-reply" formControlName="ReplyText" [value]="replies.comment" *ngIf="replies.editReply">
 
 
            </textarea>
@@ -54,17 +62,13 @@
 
         </div>
 
-        
-        <button mat-stroked-button *ngIf="LoggedInUser == response.username && !response.editReply" type="submit"
-            (click)="activateEditResponse(i)">Edit</button>
-            <button *ngIf="LoggedInUser == response.username && response.editReply" type="submit"
-            (click)="editResponse(i)">Submit</button>
+       
         
 
         <div class="col-md-8" style="margin-top:2%; margin-left: 2% ; ">
 
         <textarea style="width:100%" *ngIf="response.activeReply" formControlName="ReplyText"></textarea>
-        <button mat-stroked-button  *ngIf="!response.activeReply" type="submit" (click)="activeReply(i)">Reply</button>
+        <button mat-stroked-button style="background-color: green; color: aliceblue;" *ngIf="!response.activeReply" type="submit" (click)="activeReply(i)">Reply</button>
         <button mat-stroked-button  *ngIf="response.activeReply" type="submit" (click)="reply(i)">Submit</button>
        
     </div>
@@ -73,3 +77,4 @@
 
     </div>
 </form>
+</div>
