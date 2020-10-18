@@ -113,7 +113,7 @@ export class ConversationsComponent implements OnInit {
   }
   editResponse(i){
     if(this.checkAuth){
-      this.conversation[0].Responses[i]= {username : this.LoggedInUser, comment : this.ReplyForm.get("ReplyText").value, createdOn : Date.now() }
+      this.conversation[0].Responses[i]= {username : this.LoggedInUser, comment : this.ReplyForm.get("ReplyText").value, createdOn : Date.now(), Replies :  this.conversation[0].Responses[i].Replies}
       console.log(this.conversation[0].Responses[i])
       this.dataService.addComment({Responses : this.conversation[0].Responses}, this.conversationID).subscribe((data:any) => {
         console.log(data)
